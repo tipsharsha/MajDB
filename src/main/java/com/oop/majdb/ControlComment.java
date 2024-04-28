@@ -41,6 +41,7 @@ public class ControlComment {
         Post post = postMaybe.get();
 
         Comment comment = new Comment(commentBody.getCommentBody(), new Comment.CommentCreator(person.getUserID(), person.getName()));
+        comment.setPost(post);
         post.addComment(comment);
         postRepo.save(post);
         return new ResponseEntity<>("Comment created successfully", HttpStatus.CREATED);

@@ -20,16 +20,19 @@ public class ControlPerson {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginUser user) {
         // Process login logic here
+        if(personRepo.findByEmail(user.getEmail())==null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
+        }
         if(personRepo.findByEmailAndPassword(user.getEmail(), user.getPassword()) == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username/Password Incorrect");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Login Successful");
     }
     @PostMapping("/signup")
     public ResponseEntity<String>  signup(@RequestBody SignupUser user) {
-//        if(personRepo.findByEmail(user.getEmail())) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Exists");
-//        }
+        if(personRepo.findByEmail(user.getEmail())!=null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Forbidden, Account already exists");
+        }
         personRepo.save(new Person(user.getUsername(), user.getEmail(), user.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body("Account Creation Successful");
     }
@@ -37,8 +40,13 @@ public class ControlPerson {
 
     @GetMapping("/user")
     @ResponseBody
-    public Person getUser(@RequestParam int userID) {
-        return personRepo.findByUserID(userID);
+    public ResponseEntity<Object> getUser(@RequestParam int userID) {
+        Person person = personRepo.findByUserID(userID);
+        if(person == null) {
+            return new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
+        }
+        PersonGet personGet = new PersonGet(person.getUserID(), person.getName(), person.getEmail());
+        return new ResponseEntity<>(personGet, HttpStatus.OK);
     }
 
 
@@ -46,14 +54,32 @@ public class ControlPerson {
     @ResponseBody
     public List<Post> getPosts()
     {
-        return postRepo.findAll();
+        List<Post> posts = (List<Post>) postRepo.findAll();
+        for(int i  =0; i < posts.size(); i++) {
+            for(int j = i+1; j < posts.size(); j++) {
+                if(posts.get(i).createdAt.isBefore(posts.get(j).createdAt)) {
+                    Post temp = posts.get(i);
+                    posts.set(i, posts.get(j));
+                    posts.set(j, temp);
+                }
+            }
+        }
+        return posts;
+
+
     }
 
+
     @GetMapping("/users")
-    @ResponseBody
-    public List<Person> getUsers()
+    public @ResponseBody List<PersonGet> getUsers()
     {
-        return (List<Person>) personRepo.findAll();
+        //Remove posts from all people
+        List<Person> people = (List<Person>) personRepo.findAll();
+        List<PersonGet> peopleGet = new ArrayList<>();
+        for(Person person: people) {
+            peopleGet.add(new PersonGet(person.getUserID(), person.getName(), person.getEmail()));
+        }
+        return peopleGet;
     }
 
 }

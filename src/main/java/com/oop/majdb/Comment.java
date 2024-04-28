@@ -1,6 +1,7 @@
 package com.oop.majdb;
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import org.hibernate.annotations.OnDelete;
 
 import java.util.List;
 
@@ -51,6 +52,10 @@ public class Comment {
 
     public void setCommentBody(String commentBody) {
         this.commentBody = commentBody;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     @Embeddable

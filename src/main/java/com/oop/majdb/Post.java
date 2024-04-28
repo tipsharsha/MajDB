@@ -2,10 +2,15 @@ package com.oop.majdb;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
+import java.time.LocalDateTime;
+
 
 
 @Entity
@@ -15,35 +20,30 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int postID;
     private String postBody;
-    private Date date;
+    private String date;
+    public transient LocalDateTime createdAt = LocalDateTime.now();
 
 
-    public Post(String postBody, Date date) {
+    public Post(String postBody) {
         this.postBody = postBody;
-        this.date = date;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
         comments = new ArrayList<>();
-
     }
 
     // Constructors, getters, setters, and other methods...
 
-    public Post(int postID, String postBody, Date date, List<Comment> comments) {
-        this.postID = postID;
-        this.postBody = postBody;
-        this.date = this.date;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "person", referencedColumnName = "userID")
     private Person person;
 
 
-
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comment> comments;
 
 
     public Post() {
+        comments = new ArrayList<>();
     }
 
     public void setComments(List<Comment> comments) {
@@ -58,7 +58,7 @@ public class Post {
         return postBody;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -74,12 +74,8 @@ public class Post {
         this.postBody = postBody;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
-    }
-
-    public Person getPerson() {
-        return person;
     }
 
 
@@ -87,6 +83,9 @@ public class Post {
         comments.add(comment);
     }
 
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
 
     @Override

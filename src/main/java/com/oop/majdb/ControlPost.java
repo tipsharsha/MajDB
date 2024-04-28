@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import org.springframework.http.HttpStatus;
 import java.util.Date;
+//Import Dateformatter to string
+import java.text.SimpleDateFormat;
 
 
 
@@ -19,7 +21,6 @@ public class ControlPost {
     @Autowired
     PostRepo postRepo;
 
-    @Transactional
     @PostMapping
     public ResponseEntity<String> createPost(@RequestBody PostBody postBody) {
         Optional<Person> personMaybe = Optional.ofNullable(personRepo.findByUserID(postBody.getUserID()));
@@ -27,15 +28,19 @@ public class ControlPost {
             return ResponseEntity.status(404).body("User does not exist");
         }
         Person person = personMaybe.get();
-        Post post = new Post(postBody.getPostBody(), new Date(System.currentTimeMillis()));
+        Post post = new Post(postBody.getPostBody());
+        post.setPerson(person);
         person.addPost(post);
         personRepo.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body("Post created successfully");
     }
 
     @GetMapping
-    public ResponseEntity<Post> getPost(@RequestParam int postID) {
+    public ResponseEntity<Object> getPost(@RequestParam int postID) {
         Post post  = postRepo.findByPostID(postID);
+        if(post == null) {
+            return new ResponseEntity<>("Post does not exist", HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(post);
     }
 
@@ -43,6 +48,9 @@ public class ControlPost {
     @PatchMapping
     public ResponseEntity<String> editPost(@RequestBody PatchPost postBody) {
         Post post = postRepo.findByPostID(postBody.getPostID());
+        if(post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post does not exist");
+        }
         post.setPostBody(postBody.getPostBody());
         postRepo.save(post);
         return new ResponseEntity<>("Post edited successfully", HttpStatus.OK);
@@ -55,7 +63,7 @@ public class ControlPost {
             postRepo.deleteById(postID.getPostID());
             return ResponseEntity.status(HttpStatus.OK).body("Post deleted");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post does not exist");
     }
 
 }

@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.OnDelete;
+
 
 @Entity
 public class Person {
@@ -29,7 +31,8 @@ public class Person {
         this.posts = new ArrayList<>();
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany( mappedBy = "person", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Post> posts;
 
     public void addPost(Post post) {

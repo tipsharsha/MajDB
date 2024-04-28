@@ -2,9 +2,9 @@ package com.oop.majdb;
 
 public class PatchPost {
     private String postBody;
-    private String postID;
+    private int postID;
 
-    public PatchPost(String postBody, String postID) {
+    public PatchPost(String postBody, int postID) {
         this.postBody = postBody;
         this.postID = postID;
     }
@@ -17,11 +17,11 @@ public class PatchPost {
         this.postBody = postBody;
     }
 
-    public String getPostID() {
+    public int getPostID() {
         return postID;
     }
 
-    public void setPostID(String postID) {
+    public void setPostID(int postID) {
         this.postID = postID;
     }
 

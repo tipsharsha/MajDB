@@ -15,6 +15,11 @@ public class Comment {
     @Embedded
     private CommentCreator commentCreator;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+
     public Comment() {
     }
 
@@ -44,35 +49,40 @@ public class Comment {
                 '}';
     }
 
+    public void setCommentBody(String commentBody) {
+        this.commentBody = commentBody;
+    }
+
+    @Embeddable
+    public static class CommentCreator {
+
+        private int userID;
+        private String name;
+
+        public CommentCreator() {
+        }
+
+        public CommentCreator(int userID, String name) {
+            this.userID = userID;
+            this.name = name;
+        }
+
+        public int getUserID() {
+            return userID;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return "CommentCreator{" +
+                    "userID=" + userID +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
+    }
 }
 
-@Embeddable
-class CommentCreator {
 
-    private int userID;
-    private String name;
-
-    public CommentCreator() {
-    }
-
-    public CommentCreator(int userID, String name) {
-        this.userID = userID;
-        this.name = name;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "CommentCreator{" +
-                "userID=" + userID +
-                ", name='" + name + '\'' +
-                '}';
-    }
-}

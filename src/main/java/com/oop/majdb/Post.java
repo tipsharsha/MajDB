@@ -2,9 +2,10 @@ package com.oop.majdb;
 
 
 import jakarta.persistence.*;
-
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 @Entity
@@ -14,26 +15,31 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int postID;
     private String postBody;
-    private String date;
+    private Date date;
 
 
-    public Post(String postBody, String date) {
+    public Post(String postBody, Date date) {
         this.postBody = postBody;
         this.date = date;
         comments = new ArrayList<>();
+
     }
 
     // Constructors, getters, setters, and other methods...
 
-    public Post(int postID, String postBody, String date, List<Comment> comments) {
+    public Post(int postID, String postBody, Date date, List<Comment> comments) {
         this.postID = postID;
         this.postBody = postBody;
-        this.date = date;
+        this.date = this.date;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Person person;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comment> comments;
 
 
@@ -52,7 +58,7 @@ public class Post {
         return postBody;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -68,9 +74,14 @@ public class Post {
         this.postBody = postBody;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
+
+    public Person getPerson() {
+        return person;
+    }
+
 
     public void addComment(Comment comment) {
         comments.add(comment);

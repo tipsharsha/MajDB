@@ -2,10 +2,10 @@ package com.oop.majdb;
 
 public class CommentBody {
     private String commentBody;
-    private String userID;
-    private String postID;
+    private int userID;
+    private int postID;
 
-    public CommentBody(String commentBody, String userID, String postID) {
+    public CommentBody(String commentBody, int userID, int postID) {
         this.commentBody = commentBody;
         this.userID = userID;
         this.postID = postID;
@@ -19,19 +19,19 @@ public class CommentBody {
         this.commentBody = commentBody;
     }
 
-    public String getUserID() {
+    public int getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(int userID) {
         this.userID = userID;
     }
 
-    public String getPostID() {
+    public int getPostID() {
         return postID;
     }
 
-    public void setPostID(String postID) {
+    public void setPostID(int postID) {
         this.postID = postID;
     }
 

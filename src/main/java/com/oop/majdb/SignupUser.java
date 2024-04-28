@@ -1,18 +1,18 @@
 package com.oop.majdb;
 
 public class SignupUser {
-    private String username;
-    private String password;
-    private String email;
+    private final String name;
+    private final String password;
+    private final String email;
 
-    public SignupUser(String username, String password, String email) {
-        this.username = username;
+    public SignupUser(String name, String password, String email) {
+        this.name = name;
         this.password = password;
         this.email = email;
     }
 
     public String getUsername() {
-        return username;
+        return name;
     }
 
     public String getPassword() {

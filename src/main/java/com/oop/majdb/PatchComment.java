@@ -2,9 +2,9 @@ package com.oop.majdb;
 
 public class PatchComment {
     private String commentBody;
-    private String commentID;
+    private int commentID;
 
-    public PatchComment(String commentBody, String commentID) {
+    public PatchComment(String commentBody, int commentID) {
         this.commentBody = commentBody;
         this.commentID = commentID;
     }
@@ -17,11 +17,11 @@ public class PatchComment {
         this.commentBody = commentBody;
     }
 
-    public String getCommentID() {
+    public int getCommentID() {
         return commentID;
     }
 
-    public void setCommentID(String commentID) {
+    public void setCommentID(int commentID) {
         this.commentID = commentID;
     }
 

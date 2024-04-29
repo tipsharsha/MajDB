@@ -1,4 +1,6 @@
-package com.oop.majdb;
+package com.oop.majdb.Response;
+
+import com.oop.majdb.Comment;
 
 import java.util.List;
 

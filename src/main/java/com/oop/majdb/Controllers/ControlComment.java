@@ -42,7 +42,8 @@ public class ControlComment {
         return serviceComment.editComment(patchComment);
     }
     @DeleteMapping
-    public ResponseEntity<Object> deleteComment(@RequestBody DelComment delcomment) {
+    public ResponseEntity<Object> deleteComment(@RequestParam int commentID) {
+        DelComment delcomment = new DelComment(commentID);
         return serviceComment.deleteComment(delcomment);
     }
 }

@@ -30,11 +30,11 @@ public class ServiceComment {
     public ResponseEntity<Object> createComment(CommentBody commentBody) {
         Optional<Post> postMaybe= Optional.ofNullable(postRepo.findByPostID(commentBody.getPostID()));
         Optional<Person> personMaybe = Optional.ofNullable(personRepo.findByUserID(commentBody.getUserID()));
-        if(postMaybe.isEmpty()) {
-            return new ResponseEntity<>(Map.of("Error","Post does not exist"), HttpStatus.NOT_FOUND);
-        }
         if(personMaybe.isEmpty()) {
             return new ResponseEntity<>(Map.of("Error","User does not exist"), HttpStatus.NOT_FOUND);
+        }
+        if(postMaybe.isEmpty()) {
+            return new ResponseEntity<>(Map.of("Error","Post does not exist"), HttpStatus.NOT_FOUND);
         }
         Person person = personMaybe.get();
         Post post = postMaybe.get();

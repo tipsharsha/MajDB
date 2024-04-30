@@ -73,7 +73,6 @@ public class ServicePerson {
         for (Post post: posts) {
             postsRes.add(new PostRes(post.getPostID(), post.getPostBody(),post.getDate(), post.getComments()));
         }
-
         return postsRes;
 
 

@@ -48,13 +48,13 @@ public class ServiceComment {
 
     public ResponseEntity<Object> getComment(int commentID) {
         Optional<Comment> commentMaybe = Optional.ofNullable(commentRepo.findByCommentID(commentID));
-        return commentMaybe.<ResponseEntity<Object>>map(comment -> new ResponseEntity<>(comment, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(Map.of("Error", "Comment does not Exist"), HttpStatus.NOT_FOUND));
+        return commentMaybe.<ResponseEntity<Object>>map(comment -> new ResponseEntity<>(comment, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(Map.of("Error", "Comment does not exist"), HttpStatus.NOT_FOUND));
     }
 
     public ResponseEntity<Object> editComment(PatchComment patchComment) {
         Comment comment = commentRepo.findByCommentID(patchComment.getCommentID());
         if(comment == null) {
-            return new ResponseEntity<>(Map.of("Error", "Comment does not Exist"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Map.of("Error", "Comment does not exist"), HttpStatus.NOT_FOUND);
         }
         comment.setCommentBody(patchComment.getCommentBody());
         commentRepo.save(comment);
@@ -67,6 +67,6 @@ public class ServiceComment {
             commentRepo.deleteById(delcomment.getCommentID());
             return new ResponseEntity<>("Comment deleted", HttpStatus.OK);
         }
-        return new ResponseEntity<>(Map.of("Error", "Comment does not Exist"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(Map.of("Error", "Comment does not exist"), HttpStatus.NOT_FOUND);
     }
 }

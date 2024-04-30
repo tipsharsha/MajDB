@@ -6,6 +6,7 @@ import com.oop.majdb.Repos.PostRepo;
 import com.oop.majdb.Response.DelPost;
 import com.oop.majdb.Response.PatchPost;
 import com.oop.majdb.Response.PostBody;
+import com.oop.majdb.Response.PostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,8 @@ public class ServicePost {
         if(post == null) {
             return new ResponseEntity<>(Map.of("Error","Post does not exist"), HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(post);
+        PostRes pos = new PostRes(post.getPostID(), post.getPostBody(),post.getDate(), post.getComments());
+        return ResponseEntity.status(HttpStatus.OK).body(pos);
     }
 
 

@@ -1,8 +1,9 @@
 package com.oop.majdb.Response;
 
 public class PersonGet {
-    private int userID;
+
     private String name;
+    private int userID;
     private String email;
 
     public PersonGet(int userID, String name, String email) {

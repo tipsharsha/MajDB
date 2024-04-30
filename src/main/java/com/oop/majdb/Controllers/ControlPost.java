@@ -1,18 +1,12 @@
 package com.oop.majdb.Controllers;
-import com.oop.majdb.Entities.Person;
-import com.oop.majdb.Entities.Post;
-import com.oop.majdb.Repos.PersonRepo;
-import com.oop.majdb.Repos.PostRepo;
+
 import com.oop.majdb.Response.DelPost;
 import com.oop.majdb.Response.PatchPost;
 import com.oop.majdb.Response.PostBody;
 import com.oop.majdb.Services.ServicePost;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
-import org.springframework.http.HttpStatus;
 
 @Controller
 @RequestMapping("/post")
@@ -40,8 +34,9 @@ public class ControlPost {
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> deletePost(@RequestBody DelPost postID) {
-        return servicePost.deletePost(postID);
+    public ResponseEntity<Object> deletePost(@RequestParam int postID) {
+        DelPost postI = new DelPost(postID);
+        return servicePost.deletePost(postI);
     }
 
 }
